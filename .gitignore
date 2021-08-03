@@ -1,0 +1,31 @@
+# vscode
+.vscode
+
+# python
+venv
+__pycache__
+.ipynb_checkpoints
+.python-version
+
+# log
+logs
+cvpr21
+iccv21
+*.zip
+
+# data
+data
+stats
+*.png
+_cache_*
+figures
+*.mp4
+
+# pdf
+*.pdf
+
+# model
+*.pt
+
+# test scripts
+*.sh
