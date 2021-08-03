@@ -2,7 +2,7 @@
 
 The authors' official implementation of Gradient Normalized GAN (GN-GAN).
 
-## Recommended System Requirements
+## Requirements
 - CUDA 10.2
 - Python 3.8.9
 - Python packages
@@ -15,11 +15,11 @@ The authors' official implementation of Gradient Normalized GAN (GN-GAN).
 ## Datasets
 - CIFAR-10
 
-    Pytorch build-in CIFAR-10 will be downloaded on the fly.
+    Pytorch build-in CIFAR-10 will be downloaded automatically.
 
 - STL-10
 
-    Pytorch build-in STL-10 will be downloaded on the fly.
+    Pytorch build-in STL-10 will be downloaded automatically.
 
 - CelebA-HQ 128/256
 
@@ -117,7 +117,7 @@ All the reported values (Inception Score and FID) in our paper are calculated by
     *NOTE, `--save` dumps images to disk on the fly to prevent memory leak.
 
 ## How to integrate Gradient Normalization into your work?
-The function `normalize_gradient` is implemented based on `torch.autograd` module, which can easily replace your forward propagation of discriminator by chaning a single line.
+The function `normalize_gradient` is implemented based on `torch.autograd` module, which can easily normalize your forward propagation of discriminator by chaning a single line.
 ```python
 from torch.nn import BCEWithLogitsLoss
 from models.gradnorm import normalize_gradient
@@ -127,23 +127,20 @@ net_G = ...     # generator
 loss_fn = BCEWithLogitsLoss()
 
 # Update discriminator
-with torch.no_grad():
-    # real data
-    x_real = ...
-    # fake data
-    x_fake = net_G(torch.randn(64, 3, 32, 32))
-pred_real = normalize_gradient(net_D, x_real)
-pred_fake = normalize_gradient(net_D, x_fake)
+x_real = ...                                    # real data
+x_fake = net_G(torch.randn(64, 3, 32, 32))      # fake data
+pred_real = normalize_gradient(net_D, x_real)   # net_D(x_real)
+pred_fake = normalize_gradient(net_D, x_fake)   # net_D(x_fake)
 loss_real = loss_fn(pred_real, torch.ones_like(pred_real))
 loss_fake = loss_fn(pred_fake, torch.ones_like(pred_fake))
-(loss_real + loss_fake).backward()
+(loss_real + loss_fake).backward()              # backward propagation
 ...
 
 # Update generator
-x_fake = net_G(torch.randn(64, 3, 32, 32))
-pred_fake = normalize_gradient(net_D, x_fake)
+x_fake = net_G(torch.randn(64, 3, 32, 32))      # fake data
+pred_fake = normalize_gradient(net_D, x_fake)   # net_D(x_fake)
 loss_fake = loss_fn(pred_fake, torch.ones_like(pred_fake))
-loss.backward()
+loss.backward()                                 # backward propagation
 ...
 
 ```
