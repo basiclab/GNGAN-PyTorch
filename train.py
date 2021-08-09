@@ -56,7 +56,7 @@ flags.DEFINE_enum('loss', 'hinge', loss_fns.keys(), "loss function")
 flags.DEFINE_integer('total_steps', 200000, "total number of training steps")
 flags.DEFINE_integer('lr_decay_start', 0, 'apply linearly decay to lr')
 flags.DEFINE_integer('batch_size_D', 64, "batch size for discriminator")
-flags.DEFINE_integer('batch_size_G', 64, "batch size for generator")
+flags.DEFINE_integer('batch_size_G', 128, "batch size for generator")
 flags.DEFINE_integer('num_workers', 8, "dataloader workers")
 flags.DEFINE_float('lr_D', 4e-4, "Discriminator learning rate")
 flags.DEFINE_float('lr_G', 2e-4, "Generator learning rate")
@@ -88,9 +88,9 @@ def generate_images(net_G):
     with torch.no_grad():
         for _ in trange(0, FLAGS.num_images, FLAGS.batch_size_G,
                         ncols=0, leave=False):
-            z = torch.randn(FLAGS.batch_size_G * 2, FLAGS.z_dim).to(device)
+            z = torch.randn(FLAGS.batch_size_G, FLAGS.z_dim).to(device)
             y = torch.randint(
-                FLAGS.n_classes, (FLAGS.batch_size_G * 2,)).to(device)
+                FLAGS.n_classes, (FLAGS.batch_size_G,)).to(device)
             fake = (net_G(z, y) + 1) / 2
             images.append(fake.cpu())
     images = torch.cat(images, dim=0)
