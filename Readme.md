@@ -1,13 +1,16 @@
 # Gradient Normalization for Generative Adversarial Networks
 
-The authors' official implementation of Gradient Normalized GAN (GN-GAN).
+Yi-Lun Wu, Hong-Han Shuai, Zhi-Rui Tam, Hong-Yu Chiu
+
+Paper: [https://arxiv.org/abs/2109.02235](https://arxiv.org/abs/2109.02235)
+
+This is the official implementation of Gradient Normalized GAN (GN-GAN).
 
 ## Requirements
-- CUDA 10.2
 - Python 3.8.9
 - Python packages
     ```sh
-    # update `pip` for installing latest tensorboard.
+    # update `pip` for installing tensorboard.
     pip install -U pip setuptools
     pip install -r requirements.txt
     ```
@@ -34,7 +37,7 @@ The authors' official implementation of Gradient Normalized GAN (GN-GAN).
         ```
         python dataset.py path/to/celebahq/128/train ./data/celebahq/128
         ```
-    Our folder structure:
+    The folder structure:
     ```
     ./data/celebahq
     ├── 128
@@ -47,7 +50,7 @@ The authors' official implementation of Gradient Normalized GAN (GN-GAN).
 
 - LSUN Church Outdoor 256x256 (training set)
 
-    Our folder structure:
+    The folder structure:
     ```
     ./data/lsun/church/
     ├── data.mdb
@@ -55,7 +58,7 @@ The authors' official implementation of Gradient Normalized GAN (GN-GAN).
     ```
 
 ## Preprocessing Datasets for FID
-Pre-calculated statistic for FID can be downloaded [here](https://drive.google.com/drive/folders/1UBdzl6GtNMwNQ5U-4ESlIer43tNjiGJC?usp=sharing):
+Pre-calculated statistics for FID can be downloaded [here](https://drive.google.com/drive/folders/1UBdzl6GtNMwNQ5U-4ESlIer43tNjiGJC?usp=sharing):
 - cifar10.train.npz - Training set of CIFAR10
 - cifar10.test.npz - Testing set of CIFAR10
 - stl10.unlabeled.48.npz - Unlabeled set of STL10 in resolution 48x48
@@ -63,7 +66,7 @@ Pre-calculated statistic for FID can be downloaded [here](https://drive.google.c
 - celebahq.all.256.npz - Full dataset of CelebA-HQ 256x256
 - church.train.256.npz - Training set of LSUN Church Outdoor
 
-Our folder structure:
+Folder structure:
 ```
 ./stats
 ├── celebahq.3k.128.npz
@@ -114,10 +117,8 @@ All the reported values (Inception Score and FID) in our paper are calculated by
         --save path/to/generated/images
     ```
 
-    *NOTE, `--save` dumps images to disk on the fly to prevent memory leak.
-
 ## How to integrate Gradient Normalization into your work?
-The function `normalize_gradient` is implemented based on `torch.autograd` module, which can easily normalize your forward propagation of discriminator by chaning a single line.
+The function `normalize_gradient` is implemented based on `torch.autograd` module, which can easily normalize your forward propagation of discriminator by updating a single line.
 ```python
 from torch.nn import BCEWithLogitsLoss
 from models.gradnorm import normalize_gradient
