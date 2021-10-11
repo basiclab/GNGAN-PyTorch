@@ -82,8 +82,8 @@ def image_generator(net_G):
     world_size = dist.get_world_size()
     local_batch_size = FLAGS.batch_size_G // world_size
     with torch.no_grad():
-        for idx in range(0, FLAGS.num_images, FLAGS.batch_size_G * 2):
-            z = torch.randn(local_batch_size * 2, FLAGS.z_dim).to(rank)
+        for idx in range(0, FLAGS.num_images, FLAGS.batch_size_G):
+            z = torch.randn(local_batch_size, FLAGS.z_dim).to(rank)
             fake = (net_G(z) + 1) / 2
             fake_list = [torch.empty_like(fake) for _ in range(world_size)]
             dist.all_gather(fake_list, fake)

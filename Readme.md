@@ -133,7 +133,7 @@ x_fake = net_G(torch.randn(64, 3, 32, 32))      # fake data
 pred_real = normalize_gradient(net_D, x_real)   # net_D(x_real)
 pred_fake = normalize_gradient(net_D, x_fake)   # net_D(x_fake)
 loss_real = loss_fn(pred_real, torch.ones_like(pred_real))
-loss_fake = loss_fn(pred_fake, torch.ones_like(pred_fake))
+loss_fake = loss_fn(pred_fake, torch.zeros_like(pred_fake))
 (loss_real + loss_fake).backward()              # backward propagation
 ...
 
@@ -147,7 +147,7 @@ loss.backward()                                 # backward propagation
 ```
 
 ## Citation
-If you find our work relevant to your research, please cite:
+If you find our work is relevant to your research, please cite:
 ```
 @InProceedings{GNGAN_2021_ICCV,
     author = {Yi-Lun Wu, Hong-Han Shuai, Zhi Rui Tam, Hong-Yu Chiu},
